@@ -1,14 +1,13 @@
 import React from "react";
+import ManageStudents from "./pages/ManageStudents";
+import AttendancePage from "./pages/AttendancePage";
 
 function App() {
   return (
     <div>
-      <h1>Welcome to the E-Learning Platform</h1>
-      <nav>
-        <a href="/">Home</a> |{" "}
-        <a href="/resources">E-Resource Center</a> |{" "}
-        <a href="/attendance">Attendance</a>
-      </nav>
+      <h1>E-Learning System</h1>
+      <ManageStudents />
+      <AttendancePage />
     </div>
   );
 }
