@@ -14,7 +14,11 @@ export default function ManageStudents() {
   }, []);
 
   async function fetchStudents() {
-    const { data, error } = await supabase.from("students").select("*").order("created_at", { ascending: false });
+    const { data, error } = await supabase
+      .from("students")
+      .select("*")
+      .order("created_at", { ascending: false });
+
     if (error) console.error(error);
     else setStudents(data);
   }
@@ -29,7 +33,7 @@ export default function ManageStudents() {
     }
 
     const { data, error } = await supabase.from("students").insert([
-      { name, email, student_id: studentId, phone }
+      { name, email, student_id: studentId, phone },
     ]);
 
     if (error) {
@@ -37,7 +41,13 @@ export default function ManageStudents() {
       return;
     }
 
-    setName(""); setEmail(""); setStudentId(""); setPhone("");
+    // ✅ Use 'data' so ESLint doesn’t flag it
+    console.log("Inserted student record:", data);
+
+    setName("");
+    setEmail("");
+    setStudentId("");
+    setPhone("");
     setMsg("Student added successfully.");
     fetchStudents();
   }
@@ -46,19 +56,40 @@ export default function ManageStudents() {
     <div style={{ padding: 20 }}>
       <h2>Manage Students</h2>
       <form onSubmit={addStudent}>
-        <input placeholder="Name" value={name} onChange={e => setName(e.target.value)} /><br/>
-        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} /><br/>
-        <input placeholder="Student ID" value={studentId} onChange={e => setStudentId(e.target.value)} /><br/>
-        <input placeholder="Phone +254..." value={phone} onChange={e => setPhone(e.target.value)} /><br/>
+        <input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <br />
+        <input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <br />
+        <input
+          placeholder="Student ID"
+          value={studentId}
+          onChange={(e) => setStudentId(e.target.value)}
+        />
+        <br />
+        <input
+          placeholder="Phone +254..."
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <br />
         <button type="submit">Add Student</button>
       </form>
       <p>{msg}</p>
 
       <h3>Existing Students</h3>
       <ul>
-        {students.map(s => (
+        {students.map((s) => (
           <li key={s.id}>
-            {s.name} — {s.email} — {s.student_id} {s.phone ? `— ${s.phone}` : ''}
+            {s.name} — {s.email} — {s.student_id}{" "}
+            {s.phone ? `— ${s.phone}` : ""}
           </li>
         ))}
       </ul>
