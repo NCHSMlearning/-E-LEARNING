@@ -12,25 +12,41 @@ export default function AttendancePage() {
     const ip = "0.0.0.0"; // optional: fetch real IP via external service
 
     const { data, error } = await supabase.from("attendance").insert([
-      { student_id: studentId, date: new Date().toISOString().split("T")[0], status, geo, ip_address: ip }
+      {
+        student_id: studentId,
+        date: new Date().toISOString().split("T")[0],
+        status,
+        geo,
+        ip_address: ip,
+      },
     ]);
 
     if (error) setMsg("Error: " + error.message);
-    else setMsg("Attendance marked.");
+    else {
+      console.log("Inserted attendance record:", data); // ✅ Use data so ESLint is happy
+      setMsg("Attendance marked.");
+    }
   }
 
   return (
     <div style={{ padding: 20 }}>
       <h2>Mark Attendance</h2>
       <form onSubmit={markAttendance}>
-        <input placeholder="Student UUID" value={studentId} onChange={e => setStudentId(e.target.value)} /><br/>
-        <select value={status} onChange={e => setStatus(e.target.value)}>
+        <input
+          placeholder="Student UUID"
+          value={studentId}
+          onChange={(e) => setStudentId(e.target.value)}
+        />
+        <br />
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
           <option>Present</option>
           <option>Absent</option>
-        </select><br/>
+        </select>
+        <br />
         <button type="submit">Mark</button>
       </form>
       <p>{msg}</p>
     </div>
   );
 }
+
